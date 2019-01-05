@@ -1,5 +1,6 @@
 import csv
 import os
+import sys
 from os.path import dirname, abspath
 
 from batlog2csv import Batlog2Csv
@@ -11,8 +12,12 @@ baseDir = dirname(abspath(__file__)) + os.path.sep
 def test_that_standard_log_is_parsed_correctly():
     table = get_csv(baseDir + "/data/default.dat")
 
-    header = table.next()
-    row = table.next()
+    if sys.version_info.major >= 3:
+        header = next(table)
+        row = next(table)
+    else:
+        header = table.next()
+        row = table.next()
 
     check_header(header)
     assert row[0] == "2012-08-14 10:41:46"
@@ -25,8 +30,12 @@ def test_that_standard_log_is_parsed_correctly():
 def test_that_wrongly_ordered_log_is_parsed_correctly():
     table = get_csv(baseDir + "/data/wrongorder.dat")
 
-    header = table.next()
-    row = table.next()
+    if sys.version_info.major >= 3:
+        header = next(table)
+        row = next(table)
+    else:
+        header = table.next()
+        row = table.next()
 
     check_header(header)
     assert row[0] == "2014-08-07 00:15:00"
